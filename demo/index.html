@@ -1,0 +1,45 @@
+<html lang="en">
+  <head>
+    <title>jwplayer test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+    <script>
+      const getParameterByName = (name, url) => { // eslint-disable-line no-unused-vars
+        if (!url) {
+          url = window.location.href
+        }
+        name = name.replace(/[[\]]/g, "\\$&")
+        const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
+        const results = regex.exec(url)
+        if (!results) return null
+        if (!results[2]) return ''
+        return decodeURIComponent(results[2].replace(/\+/g, " "))
+      }
+      window.query = getParameterByName
+    </script>
+  </head>
+  <body>
+    <div id="video-container"></div>
+    <script src="lib/jwplayer/jwplayer.js"></script>
+    <script src="lib/red5pro/red5pro-sdk.min.js"></script>
+    <script src="script/red5pro-jwplayer-provider.bundle.js"></script>
+    <script type="text/javascript">
+      // Define the file extension with `red5pro` and the 
+      //       red5pro-jwplayer-provider will recognize the support.
+      const streamName = query('streamName') || 'stream1'
+      const player = jwplayer('video-container')
+              .setup({
+                autostart: true,
+                muted: true,
+                file: `${streamName}.red5pro`, // will stripe extension and use name as streamName
+                red5pro: {
+                  protocol: 'wss',
+                  host: window.query('host') || 'YOUR.RED5PRO.DEPLOY',
+                  port: 443, // 5080 if protocol is ws (unsecure)
+                  app: 'live',
+                  mediaElementId: 'red5pro-subscriber'
+                }
+              })
+    </script>
+  </body>
+</html>

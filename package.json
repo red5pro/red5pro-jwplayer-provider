@@ -1,0 +1,35 @@
+{
+  "name": "red5pro-jwplayer-provider",
+  "version": "1.0.0",
+  "description": "Custom Provider for JWPlayer to integrate Red5 Pro Live Streaming",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infrared5/red5pro-jwplayer-provider.git"
+  },
+  "author": "Infrared5",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/infrared5/red5pro-jwplayer-provider/issues"
+  },
+  "homepage": "https://github.com/infrared5/red5pro-jwplayer-provider#readme",
+  "scripts": {
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
+    "babel-loader": "^8.0.6",
+    "babel-preset-minify": "^0.5.0",
+    "eslint": "^5.16.0",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.3.1"
+  }
+}

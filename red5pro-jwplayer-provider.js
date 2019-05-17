@@ -1,0 +1,134 @@
+((window, Promise, jwplayer, red5pro) => {
+
+  if (!jwplayer) {
+    console.error('JWPlayer required.')
+    return
+  }
+
+  red5pro.setLogLevel('debug')
+
+  const RED5PRO = 'red5pro'
+  const typeMatch = /^red5pro/
+
+  const log = (message) => {
+    console.log(`[red5pro] :: ${message}`)
+  }
+
+  const generateVideoElement = (elementId, muted) => {
+    var video = document.createElement('video')
+    video.id = elementId
+    video.muted = muted
+    return video
+  }
+
+  function R5ProPlayerProvider (playerId, config, mediaElement) { // eslint-disable-line no-unused-vars
+    this.container = undefined
+    this.subscriber = undefined
+    this.volumeValue = 1
+    this.initPlaybackSettings = {
+      autostart: config.autostart,
+      muted: config.muted
+    }
+    this.initConfiguration = Object.assign(config.setupConfig.red5pro, {
+      streamName: config.setupConfig.file.match(/(.*)\.red5pro/)[1]
+    })
+    console.log(config)
+    console.log(this.initConfiguration)
+
+    Object.assign(this, jwplayer(playerId).Events, {
+      onSubscribeEvent: (event) => {
+        console.log(event)
+      },
+
+      play: () => {
+        log('play()')
+        if (this.subscriber) {
+          this.subscriber.resume()
+          this.setState('playing')
+          this.setVisibility(true)
+        }
+        return Promise.resolve()
+      },
+
+      pause: () => {
+        log('pause()')
+        if (this.subscriber) {
+          this.setState('paused');
+          this.subscriber.pause()
+        }
+      },
+
+      stop: () => {
+        log('stop()')
+        if (this.subscriber) {
+          this.setState('idle');
+          this.subscriber.stop()
+        }
+      },
+
+      preload: () => {
+        log('preload()')
+      },
+
+      load: () => {
+        log('load()')
+        this.duration = NaN
+        this.setState('buffering')
+
+        new red5pro.RTCSubscriber()
+          .init(this.initConfiguration)
+          .then(subscriberImpl => {
+            this.subscriber = subscriberImpl
+            this.subscriber.on('*', this.onSubscribeEvent)
+            return this.subscriber.subscribe()
+          })
+          .then(() => {
+            this.trigger('bufferFull')
+            if (this.initPlaybackSettings.autostart) {
+              this.play()
+            }
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      },
+
+      volume: (value) => {
+        log(`setVolume(${value})`)
+        this.volumeValue = value/100
+        if (this.subscriber) {
+          this.subscriber.setVolume(this.volumeValue)
+        }
+      },
+
+      mute: (muted) => {
+        log(`mute(${muted})`)
+        if (this.subscriber) {
+          muted ? this.subscriber.mute() : this.subscriber.unmute()
+          muted ? this.subscriber.setVolume(0) : this.subscriber.setVolume(this.volumeValue)
+        }
+      },
+
+      setContainer: (container) => {
+        log('setContainer()')
+        const videoElement = generateVideoElement(this.initConfiguration.mediaElementId, this.initPlaybackSettings.muted)
+        this.container = container
+        this.container.appendChild(videoElement)
+      }
+    })
+
+  }
+
+  R5ProPlayerProvider.supports = item => {
+    return typeMatch.test(item.type)
+  }
+
+  R5ProPlayerProvider.getName = () => {
+    return {
+      name: RED5PRO
+    }
+  }
+
+  jwplayer.api.registerProvider(R5ProPlayerProvider)
+
+})(window, window.Promise, window.jwplayer, window.red5prosdk)
