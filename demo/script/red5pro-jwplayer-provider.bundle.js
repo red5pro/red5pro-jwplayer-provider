@@ -121,9 +121,10 @@
     this.container = undefined;
     this.subscriber = undefined;
     this.volumeValue = 1;
+    this.muted = !!config.mute;
     this.initPlaybackSettings = {
-      autostart: config.autostart,
-      muted: config.muted
+      autostart: !!config.autostart,
+      muted: config.mute
     };
     this.initConfiguration = Object.assign(config.setupConfig.red5pro, {
       streamName: config.setupConfig.file.match(/(.*)\.red5pro/)[1]
@@ -132,6 +133,15 @@
     console.log(this.initConfiguration);
     Object.assign(this, jwplayer(playerId).Events, {
       onSubscribeEvent: function onSubscribeEvent(event) {
+        if (event.type === 'Subscribe.Time.Update') {
+          _this.trigger('time', {
+            position: event.data.time,
+            duration: event.data.time
+          });
+
+          return;
+        }
+
         console.log(event);
       },
       play: function play() {
@@ -194,12 +204,13 @@
         log("setVolume(".concat(value, ")"));
         _this.volumeValue = value / 100;
 
-        if (_this.subscriber) {
+        if (_this.subscriber && !_this.muted) {
           _this.subscriber.setVolume(_this.volumeValue);
         }
       },
       mute: function mute(muted) {
         log("mute(".concat(muted, ")"));
+        _this.muted = muted;
 
         if (_this.subscriber) {
           muted ? _this.subscriber.mute() : _this.subscriber.unmute();

@@ -25,9 +25,10 @@
     this.container = undefined
     this.subscriber = undefined
     this.volumeValue = 1
+    this.muted = !!config.mute
     this.initPlaybackSettings = {
-      autostart: config.autostart,
-      muted: config.muted
+      autostart: !!config.autostart,
+      muted: config.mute
     }
     this.initConfiguration = Object.assign(config.setupConfig.red5pro, {
       streamName: config.setupConfig.file.match(/(.*)\.red5pro/)[1]
@@ -37,6 +38,13 @@
 
     Object.assign(this, jwplayer(playerId).Events, {
       onSubscribeEvent: (event) => {
+        if (event.type === 'Subscribe.Time.Update') {
+          this.trigger('time', {
+            position: event.data.time,
+            duration: event.data.time
+          })
+          return
+        }
         console.log(event)
       },
 
@@ -96,13 +104,14 @@
       volume: (value) => {
         log(`setVolume(${value})`)
         this.volumeValue = value/100
-        if (this.subscriber) {
+        if (this.subscriber && !this.muted) {
           this.subscriber.setVolume(this.volumeValue)
         }
       },
 
       mute: (muted) => {
         log(`mute(${muted})`)
+        this.muted = muted
         if (this.subscriber) {
           muted ? this.subscriber.mute() : this.subscriber.unmute()
           muted ? this.subscriber.setVolume(0) : this.subscriber.setVolume(this.volumeValue)
