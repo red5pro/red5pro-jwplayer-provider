@@ -140,6 +140,12 @@
           });
 
           return;
+        } else if (event.type === 'Subscribe.InvalidName') {
+          _this.trigger('setupError');
+        } else if (event.type === 'Subscribe.Play.Unpublish') {
+          _this.trigger('complete');
+        } else if (event.type === 'Subscribe.Connection.Closed') {
+          _this.trigger('playlistComplete');
         }
 
         console.log(event);

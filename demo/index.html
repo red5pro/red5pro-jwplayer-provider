@@ -10,6 +10,45 @@
       .jw-volume-tip {
         padding: 13px 0 10px !important;
       }
+      .settings-field {
+        font-family: 'system-ui';
+      }
+      .settings-field > label {
+        width: 120px;
+        text-align: right;
+        display: inline-block;
+      }
+      .settings-container {
+        width: 640px;
+      }
+      .settings-field > input {
+        border: 1px solid rgba(217,221,230,1);
+        background-color: rgba(217,221,230,.5);
+        width: 400px;
+        border-radius: 2px;
+        display: inline-block;
+        font-size: 15px;
+        margin: 0;
+        padding: 10px 15px;
+      }
+      .settings-field > button {
+        background-color: #fc0c0c;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 16px;
+        margin: 0 0 0 10px;
+        padding: 10px 20px;
+        text-align: center;
+        text-transform: uppercase;
+        user-select: none;
+        vertical-align: middle;
+        width: auto;
+        cursor: pointer;
+      }
     </style>
     <script>
       const getParameterByName = (name, url) => { // eslint-disable-line no-unused-vars
@@ -27,28 +66,68 @@
     </script>
   </head>
   <body>
+    <div class="settings-container">
+      <p class="settings-field">
+        <label for="host-field">Host:</label>
+        <input type="text" id="host-field" name="host-field" placeholder="https://your.red5pro.baseurl">
+      </p>
+      <p class="settings-field">
+        <label for="streamname-field">Stream Name:</label>
+        <input type="text" id="streamname-field" name="streamname-field" placeholder="streamName">
+        <button id="submit-button">Play</button>
+      </p>
+    </div>
     <div id="video-container"></div>
     <script src="lib/jwplayer/jwplayer.js"></script>
     <script src="lib/red5pro/red5pro-sdk.min.js"></script>
     <script src="script/red5pro-jwplayer-provider.bundle.js"></script>
     <script type="text/javascript">
-      // Define the file extension with `red5pro` and the 
-      //       red5pro-jwplayer-provider will recognize the support.
-      const streamName = query('streamName') || 'stream1'
-      const player = jwplayer('video-container')
+
+      const playButton = document.getElementById('submit-button')
+
+      const setSetting = (id, value) => {
+        document.getElementById(id).value = value
+      }
+      const getSetting = (id) => {
+        return document.getElementById(id).value
+      }
+      const startPlayback = () => {
+        const streamName = getSetting('streamname-field') || 'stream1'
+        const hostURI = getSetting('host-field') || 'https://your.red5pro.baseurl'
+        const pMatch = hostURI.match(/^http[s]?/)
+        const hMatch = hostURI.match(/^http[s]?:\/\/(.*)+/)
+        const protocol = (pMatch && pMatch.length > 0 && pMatch[1] === 'http') ? 'ws' : 'wss'
+        const host = (hMatch && hMatch.length > 0) ? hMatch[1] : hostURI
+        const port = protocol === 'http' ? 5080 : 443
+        // Define the file extension with `red5pro` and the 
+        //       red5pro-jwplayer-provider will recognize the support.
+        const player = jwplayer('video-container')
               .setup({
                 stretching: 'fill',
                 autostart: 'viewable',
                 mute: true,
                 file: `${streamName}.red5pro`, // will stripe extension and use name as streamName
                 red5pro: {
-                  protocol: 'wss',
-                  host: window.query('host') || 'YOUR.RED5PRO.DEPLOY',
-                  port: 443, // 5080 if protocol is ws (unsecure)
+                  protocol: protocol,
+                  host: host,
+                  port: port,
                   app: 'live',
                   mediaElementId: 'red5pro-subscriber'
                 }
               })
+              .on('all', function(type, event) {
+                console.warn(type, event);
+              })
+      }
+
+      setSetting('host-field', query('host') || 'https://your.red5pro.baseurl')
+      setSetting('streamname-field', query('streamName') || 'stream1')
+
+      playButton.addEventListener('click', (event) => {
+        startPlayback()
+        return false
+      })
+
     </script>
   </body>
 </html>
