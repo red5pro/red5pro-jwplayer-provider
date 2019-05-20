@@ -3,51 +3,13 @@
     <title>jwplayer test</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+    <link rel="stylesheet" href="style/main.css">
     <style>
       .jw-slider-time, .jw-icon-rewind {
         display: none !important;
       }
       .jw-volume-tip {
         padding: 13px 0 10px !important;
-      }
-      .settings-field {
-        font-family: 'system-ui';
-      }
-      .settings-field > label {
-        width: 120px;
-        text-align: right;
-        display: inline-block;
-      }
-      .settings-container {
-        width: 640px;
-      }
-      .settings-field > input {
-        border: 1px solid rgba(217,221,230,1);
-        background-color: rgba(217,221,230,.5);
-        width: 400px;
-        border-radius: 2px;
-        display: inline-block;
-        font-size: 15px;
-        margin: 0;
-        padding: 10px 15px;
-      }
-      .settings-field > button {
-        background-color: #fc0c0c;
-        color: #fff;
-        border: none;
-        border-radius: 3px;
-        display: inline-block;
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 16px;
-        margin: 0 0 0 10px;
-        padding: 10px 20px;
-        text-align: center;
-        text-transform: uppercase;
-        user-select: none;
-        vertical-align: middle;
-        width: auto;
-        cursor: pointer;
       }
     </style>
     <script>
@@ -66,6 +28,16 @@
     </script>
   </head>
   <body>
+    <div class="header">
+      <a href="https://red5pro.com" class="logo" target="_blank">
+        <img class="company-logo" src="images/red5pro_logo.svg" alt="Red5 Pro">
+      </a>
+    </div>
+    <div class="info-container">
+      <p class="info">
+        This is a basic example of subscribing to a live stream using the <a href="https://red5pro.com" target="_blank">Red5 Pro</a> HTML SDK to playback video in a <a href="https://www.jwplayer.com/" target="_blank">JW Player</a>.
+      </p>
+    </div>
     <div class="settings-container">
       <p class="settings-field">
         <label for="host-field">Host:</label>
@@ -76,6 +48,17 @@
         <input type="text" id="streamname-field" name="streamname-field" placeholder="streamName">
         <button id="submit-button">Play</button>
       </p>
+    </div>
+    <div class="info-container">
+      <div class="info">
+        <p class="instruction-info">To use this demo:</p>
+        <ol class="instruction-list">
+          <li>Start a live broadcast on your <a href="https://red5pro.com" target="_blank">Red5 Pro</a> server from another tab, browser or Mobile Device.</li>
+          <li>Enter the location of your server in the <strong>Host</strong> field.</li>
+          <li>Enter the stream name of the live broadcast in the <strong>Stream Name</strong> field.</li>
+          <li>Click the <strong>PLAY</strong> button!</li>
+        </ol>
+      </div>
     </div>
     <div id="video-container"></div>
     <script src="lib/jwplayer/jwplayer.js"></script>
@@ -116,8 +99,14 @@
                 }
               })
               .on('all', function(type, event) {
-                console.warn(type, event);
+                if (type !== 'time') {
+                  console.warn(type, event)
+                }
               })
+        const infoContainers = document.getElementsByClassName('info-container')
+        Array.from(infoContainers).forEach(el => {
+          el.classList.add('hidden')
+        })
       }
 
       setSetting('host-field', query('host') || 'https://your.red5pro.baseurl')

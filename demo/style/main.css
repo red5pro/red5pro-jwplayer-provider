@@ -1,0 +1,97 @@
+.hidden {
+  display: none;
+}
+.header {
+  width: 100%;
+  min-height: 60px;
+  background-color: #a8a8a8;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.logo {
+  position: absolute;
+  left: 0;
+  padding: .8em 1em;
+  text-decoration: none;
+}
+.company-logo {
+  max-height: 35px;
+  color: #fff;
+}
+.settings-field {
+  font-family: 'system-ui';
+}
+.settings-field > label {
+  width: 120px;
+  text-align: right;
+  display: inline-block;
+}
+.settings-container {
+  width: 640px;
+}
+.settings-field > input {
+  border: 1px solid rgba(217,221,230,1);
+  background-color: rgba(217,221,230,.5);
+  width: 400px;
+  border-radius: 2px;
+  display: inline-block;
+  font-size: 15px;
+  margin: 0;
+  padding: 10px 15px;
+}
+.settings-field > button {
+  background-color: #fc0c0c;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  margin: 0 0 0 10px;
+  padding: 10px 20px;
+  text-align: center;
+  text-transform: uppercase;
+  user-select: none;
+  vertical-align: middle;
+  width: auto;
+  cursor: pointer;
+}
+
+.info-container {
+  font-family: 'system-ui';
+  background-color: rgba(217,221,230,0.3);
+}
+
+.info {
+  margin: 0 auto;
+  max-width: 400px;
+  padding: 16px;
+  font-weight: 500;
+}
+
+.instruction-info {
+  margin: 0 0 24px 0;
+}
+
+.instruction-list {
+  margin: 0;
+  font-weight: 200;
+}
+
+.instruction-list > li {
+  line-height: 24px;
+  padding-bottom: 12px;
+}
+
+@media screen and (max-width: 660px) {
+  .settings-container {
+    width: 100%;
+  }
+  .settings-field > input {
+    width: 50%;
+  }
+  #submit-button {
+    display: block;
+    margin: 24px auto 16px auto;
+  }
+}

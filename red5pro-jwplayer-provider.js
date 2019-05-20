@@ -44,6 +44,12 @@
             duration: event.data.time
           })
           return
+        } else if (event.type === 'Subscribe.InvalidName') {
+          this.trigger('setupError')
+        } else if (event.type === 'Subscribe.Play.Unpublish') {
+          this.trigger('complete')
+        } else if (event.type === 'Subscribe.Connection.Closed') {
+          this.trigger('playlistComplete')
         }
         console.log(event)
       },
