@@ -52,7 +52,7 @@
     <div class="settings-container">
       <p class="settings-field">
         <label for="host-field">Host:</label>
-        <input type="text" id="host-field" name="host-field" placeholder="https://your.red5pro.baseurl">
+        <input type="text" id="host-field" name="host-field" placeholder="your.red5pro.baseurl">
       </p>
       <p class="settings-field">
         <label for="streamname-field">Stream Name:</label>
@@ -93,12 +93,14 @@
       }
       const startPlayback = () => {
         const streamName = getSetting('streamname-field') || 'stream1'
-        const hostURI = getSetting('host-field') || 'https://your.red5pro.baseurl'
+        const hostURI = getSetting('host-field') || 'your.red5pro.baseurl'
         const pMatch = hostURI.match(/^http[s]?/)
         const hMatch = hostURI.match(/^http[s]?:\/\/(.*)+/)
         const protocol = (pMatch && pMatch.length > 0 && pMatch[1] === 'http') ? 'ws' : 'wss'
         const host = (hMatch && hMatch.length > 0) ? hMatch[1] : hostURI
         const port = protocol === 'http' ? 5080 : 443
+        eventContainer.classList.remove('event-error')
+        eventsField.innerText = 'On Hold.'
         // Define the file extension with `red5pro` and the 
         //       red5pro-jwplayer-provider will recognize the support.
         const player = jwplayer('video-container')
@@ -117,7 +119,7 @@
               })
               .on('all', function(type, event) {
                 if (type.match(/^red5pro:/)) {
-                  eventsField.innerText = event.sourceError ? event.sourceError : event.eventType
+                  eventsField.innerText = event.sourceError ? event.message : event.eventType
                   eventContainer.classList.add(event.sourceError ? 'event-error' : 'event-normal')
                 }
                 if (type !== 'time') {
@@ -131,7 +133,7 @@
         })
       }
 
-      setSetting('host-field', query('host') || 'https://your.red5pro.baseurl')
+      setSetting('host-field', query('host') || 'your.red5pro.baseurl')
       setSetting('streamname-field', query('streamName') || 'stream1')
 
       playButton.addEventListener('click', (event) => {
