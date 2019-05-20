@@ -1,3 +1,6 @@
+body {
+  margin: 8px;
+}
 .hidden {
   display: none;
 }
@@ -26,6 +29,7 @@
   display: inline-block;
 }
 .settings-container {
+  margin: 0 auto;
   width: 640px;
 }
 .settings-field > input {
@@ -83,6 +87,30 @@
   padding-bottom: 12px;
 }
 
+.source-code {
+  background-color: #fff;
+  position: absolute;
+  top: 8px;
+  right: 0;
+  padding: 1.3em 2em;
+}
+.source-code-link {
+  font-weight: 400;
+  color: #0B7EF4;
+  text-decoration: none;
+  font-family: 'system-ui';
+}
+.source-code svg {
+    fill: #000;
+    height: 14px;
+    top: 2px;
+    width: 15px;
+}
+
+#video-container {
+  margin: 0 auto;
+}
+
 @media screen and (max-width: 660px) {
   .settings-container {
     width: 100%;
@@ -90,8 +118,19 @@
   .settings-field > input {
     width: 50%;
   }
+  .info {
+    margin: 0 auto;
+  }
   #submit-button {
     display: block;
     margin: 24px auto 16px auto;
   }
+}
+
+@media screen and (max-width: 400px) {
+ .source-code {
+  position: relative;
+  padding: 0.8em;
+  text-align: right;
+ }
 }
