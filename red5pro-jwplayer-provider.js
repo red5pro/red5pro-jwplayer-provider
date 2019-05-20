@@ -45,13 +45,18 @@
           })
           return
         } else if (event.type === 'Subscribe.InvalidName') {
-          this.trigger('setupError')
+            this.trigger('red5pro:error', {
+              code: 102640,
+              sourceError: event.type,
+              message: 'Could not establish Subscriber.'
+            })
+            this.setState('error')
         } else if (event.type === 'Subscribe.Play.Unpublish') {
           this.trigger('complete')
         } else if (event.type === 'Subscribe.Connection.Closed') {
           this.trigger('playlistComplete')
         }
-        console.log(event)
+        this.trigger('red5pro:event', Object.assign(event, {eventType:event.type}))
       },
 
       play: () => {
@@ -103,7 +108,12 @@
             }
           })
           .catch(error => {
-            console.error(error)
+            this.trigger('red5pro:error', {
+              code: 102640,
+              sourceError: error,
+              message: 'Could not establish Subscriber.'
+            })
+            this.setState('error')
           })
       },
 

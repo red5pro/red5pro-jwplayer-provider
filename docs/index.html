@@ -72,12 +72,18 @@
       </div>
     </div>
     <div id="video-container"></div>
+    <div class="events-container hidden">
+      <p id="events-field">On Hold.</p>
+    </div>
     <script src="lib/jwplayer/jwplayer.js"></script>
     <script src="lib/red5pro/red5pro-sdk.min.js"></script>
     <script src="script/red5pro-jwplayer-provider.bundle.js"></script>
     <script type="text/javascript">
 
       const playButton = document.getElementById('submit-button')
+      const eventsField = document.getElementById('events-field')
+      const eventContainer = document.getElementsByClassName('events-container')[0]
+      const infoContainers = document.getElementsByClassName('info-container')
 
       const setSetting = (id, value) => {
         document.getElementById(id).value = value
@@ -110,11 +116,16 @@
                 }
               })
               .on('all', function(type, event) {
+                if (type.match(/^red5pro:/)) {
+                  eventsField.innerText = event.sourceError ? event.sourceError : event.eventType
+                  eventContainer.classList.add(event.sourceError ? 'event-error' : 'event-normal')
+                }
                 if (type !== 'time') {
                   console.warn(type, event)
                 }
               })
-        const infoContainers = document.getElementsByClassName('info-container')
+
+        eventContainer.classList.remove('hidden')
         Array.from(infoContainers).forEach(el => {
           el.classList.add('hidden')
         })
