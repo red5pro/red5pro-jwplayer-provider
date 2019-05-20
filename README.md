@@ -1,2 +1,3 @@
 # red5pro-jwplayer-provider
-Custom Provider for JWPlayer to integrate Red5 Pro Live Streaming
+
+Custom Provider for [https://www.jwplayer.com/](JWPlayer) to integrate [https://red5pro.com](Red5 Pro) Live Streaming.
