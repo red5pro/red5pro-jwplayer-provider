@@ -20,18 +20,22 @@ body {
   max-height: 35px;
   color: #fff;
 }
+
 .settings-field {
   font-family: 'system-ui';
 }
+
 .settings-field > label {
   width: 120px;
   text-align: right;
   display: inline-block;
 }
+
 .settings-container {
   margin: 0 auto;
   width: 640px;
 }
+
 .settings-field > input {
   border: 1px solid rgba(217,221,230,1);
   background-color: rgba(217,221,230,.5);
@@ -42,6 +46,7 @@ body {
   margin: 0;
   padding: 10px 15px;
 }
+
 .settings-field > button {
   background-color: #fc0c0c;
   color: #fff;
@@ -91,20 +96,41 @@ body {
   background-color: #fff;
   position: absolute;
   top: 8px;
-  right: 0;
+  right: 8px;
   padding: 1.3em 2em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .source-code-link {
   font-weight: 400;
   color: #0B7EF4;
   text-decoration: none;
   font-family: 'system-ui';
 }
+
 .source-code svg {
     fill: #000;
     height: 14px;
     top: 2px;
     width: 15px;
+}
+
+.events-container {
+  background-color: #eee;
+  text-align: center;
+  padding: 8px 0;
+  font-family: 'system-ui';
+  width: 640px;
+  margin: 0 auto;
+}
+
+.event-normal {
+  background-color: #e5fbd4;
+  color: #000;
+}
+.event-error {
+  background-color: #fc0c0c;
+  color: #fff;
 }
 
 #video-container {
@@ -128,9 +154,10 @@ body {
 }
 
 @media screen and (max-width: 400px) {
- .source-code {
-  position: relative;
-  padding: 0.8em;
-  text-align: right;
- }
+  .source-code {
+    position: relative;
+    padding: 0.8em;
+    text-align: right;
+    right: 0px;
+  }
 }

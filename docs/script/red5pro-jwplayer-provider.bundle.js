@@ -141,14 +141,22 @@
 
           return;
         } else if (event.type === 'Subscribe.InvalidName') {
-          _this.trigger('setupError');
+          _this.trigger('red5pro:error', {
+            code: 102640,
+            sourceError: event.type,
+            message: 'Could not establish Subscriber.'
+          });
+
+          _this.setState('error');
         } else if (event.type === 'Subscribe.Play.Unpublish') {
           _this.trigger('complete');
         } else if (event.type === 'Subscribe.Connection.Closed') {
           _this.trigger('playlistComplete');
         }
 
-        console.log(event);
+        _this.trigger('red5pro:event', Object.assign(event, {
+          eventType: event.type
+        }));
       },
       play: function play() {
         log('play()');
@@ -203,7 +211,13 @@
             _this.play();
           }
         })["catch"](function (error) {
-          console.error(error);
+          _this.trigger('red5pro:error', {
+            code: 102640,
+            sourceError: error,
+            message: 'Could not establish Subscriber.'
+          });
+
+          _this.setState('error');
         });
       },
       volume: function volume(value) {
