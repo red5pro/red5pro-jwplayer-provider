@@ -3,7 +3,7 @@ export default {
 
   entry: path.join(__dirname, 'red5pro-jwplayer-provider.js'),
   output: {
-    path: path.join(__dirname, 'demo', 'script'),
+    path: path.join(__dirname, 'docs', 'script'),
     filename: 'red5pro-jwplayer-provider.bundle.js'
   },
   module: {
@@ -21,7 +21,7 @@ export default {
   devtool: 'source-map',
   mode: 'development',
   devServer: {
-    contentBase: './demo',
+    contentBase: './docs',
     inline: true,
     port: 3000
   }
