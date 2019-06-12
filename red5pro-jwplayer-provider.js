@@ -41,7 +41,7 @@
         if (event.type === 'Subscribe.Time.Update') {
           this.trigger('time', {
             position: event.data.time,
-            duration: event.data.time
+            duration: Infinity
           })
           return
         } else if (event.type === 'Subscribe.InvalidName') {
