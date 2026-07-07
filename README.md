@@ -1,6 +1,6 @@
 # red5pro-jwplayer-provider
 
-This legacy example demonstrates how Red5 Pro playback can be integrated with JW Player through a custom provider. For current production deployments, please refer to the latest Red5 HTML SDK documentation.
+This legacy example demonstrates how Red5 Pro playback can be integrated with JW Player through a custom provider. For current production deployments, please refer to the latest [Red5 HTML SDK documentation](https://www.red5.net/docs/red5-pro/development/sdks/red5-webrtc-sdk/).
 Custom Provider for [JWPlayer](https://www.jwplayer.com/) to integrate [Red5 Pro](https://red5pro.com) Live Streaming.
 
 # Demo
